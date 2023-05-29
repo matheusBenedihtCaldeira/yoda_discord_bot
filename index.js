@@ -2,6 +2,7 @@
 require('dotenv').config();
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Get the command file paths
 const fs = require('fs');
@@ -24,7 +25,6 @@ for (const file of commandFiles) {
 }
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
@@ -34,3 +34,20 @@ client.once(Events.ClientReady, c => {
 
 // Log in to Discord with your client's token
 client.login(process.env.TOKEN);
+
+// Configure the interactions
+client.on(Events.InteractionCreate, async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+	const command = interaction.client.commands.get(interaction.commandName);
+	if (!command) {
+		console.error('Couldn\'t find command');
+		return;
+	}
+	try {
+		await command.execute(interaction);
+	}
+	catch (err) {
+		console.error(err);
+		await interaction.reply('A error occurred');
+	}
+});
