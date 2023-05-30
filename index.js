@@ -1,7 +1,7 @@
 // Require dotenv to get the keys
 require('dotenv').config();
 // Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Collection, EmbedBuilder } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Get the command file paths
@@ -50,4 +50,13 @@ client.on(Events.InteractionCreate, async interaction => {
 		console.error(err);
 		await interaction.reply('A error occurred');
 	}
+});
+
+client.on('guildMemberAdd', (member) => {
+	const canal_logs = '1068352926713651220';
+	const embed = new EmbedBuilder()
+		.setColor(0x9fad07)
+		.setTitle('Boas-vindas')
+		.setDescription(`Ah, bem-vindo você é! Hmmm, alegria em meu coração eu sinto ao recebê-lo. Sim, sim! Pela Força guiado, aqui você é jovem padawan. Boas-vindas ${member}, eu dou a você!`);
+	member.guild.channels.cache.get(canal_logs).send({ embeds: [embed], content: `${member}` });
 });

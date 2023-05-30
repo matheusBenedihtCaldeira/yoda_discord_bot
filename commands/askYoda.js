@@ -12,7 +12,7 @@ module.exports = {
 		const { options } = interaction;
 		const question = options.getString('question');
 		const yodaResponse = async (questionForYoda) => {
-			const prompt = `Responda a seguinte pergunta como se fosse o mestre Yoda falando: ${questionForYoda}`;
+			const prompt = `Responda com uma linha no maximo: ${questionForYoda}`;
 
 			try {
 				const completion = await openAi.createCompletion({
